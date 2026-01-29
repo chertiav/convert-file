@@ -58,20 +58,22 @@ public final class ServiceUtils {
         StringBuilder sb = new StringBuilder();
         sb.append(csvHeader).append(CSV_RECORD_END);
 
-        for (OperationDataResult r : operationDataResults) {
-            sb.append(formatForCsv(r.getDate()))
+        for (OperationDataResult record : operationDataResults) {
+            sb.append(formatForCsv(record.getDate()))
                     .append(CSV_SEPARATOR)
-                    .append(formatForCsv(r.getTime()))
+                    .append(formatForCsv(record.getTime()))
                     .append(CSV_SEPARATOR)
-                    .append(formatForCsv(r.getLocation()))
+                    .append(formatForCsv(record.getLocation()))
                     .append(CSV_SEPARATOR)
-                    .append(formatForCsv(r.getDuration()))
+                    .append(formatForCsv(record.getDuration()))
                     .append(CSV_SEPARATOR)
-                    .append(formatForCsv(r.getType()))
+                    .append(formatForCsv(record.getType()))
                     .append(CSV_SEPARATOR)
-                    .append(r.getSalaryMonth())
+                    .append(record.getSalaryMonth())
                     .append(CSV_SEPARATOR)
-                    .append(r.getSalaryYear())
+                    .append(record.getSalaryYear())
+                    .append(CSV_SEPARATOR)
+                    .append(record.getColor())
                     .append(CSV_RECORD_END);
         }
 

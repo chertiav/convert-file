@@ -1,35 +1,42 @@
 package com.chertiavdev;
 
-import static com.chertiavdev.util.ServiceUtils.extractMonthFromFilename;
-
-import com.chertiavdev.models.Operation;
 import com.chertiavdev.models.OperationDataResult;
 import com.chertiavdev.service.OperationFileService;
 import com.chertiavdev.service.impl.OperationFileServiceImpl;
+import java.nio.file.Path;
 import java.util.List;
 
 public class Main {
 
     private static final String PLEASE_PROVIDE_A_SINGLE_ARGUMENT_WITH_A_FILENAME =
             "Please provide a single argument with a filename.";
-    private static final String CSV_EXTENSION = ".csv";
+    private static final String CSV_RESULT_FILE = "/result.csv";
     private static final String CSV_HEADER =
-            "date,time,location,duration,type,salaryMonth,salaryYear";
+            "date,time,location,duration,type,salaryMonth,salaryYear,color";
+    private static final int EXPECTED_ARG_COUNT = 2;
+    public static final int SOURCE_FILE_INDEX = 0;
+    public static final int OUTPUT_CSV_INDEX = 1;
+    public static final String FILES_WRITTEN_SUCCESSFULLY = "Files written successfully.";
 
     public static void main(String[] args) {
-        if (args.length != 1) {
+        if (args.length != EXPECTED_ARG_COUNT) {
             throw new IllegalArgumentException(PLEASE_PROVIDE_A_SINGLE_ARGUMENT_WITH_A_FILENAME);
         }
 
-        String fromFileName = args[0];
-        String toFileName = fromFileName.substring(0, fromFileName.indexOf(".")) + CSV_EXTENSION;
-        int monthIdentifier = extractMonthFromFilename(fromFileName);
+        Path inputDir = Path.of(args[SOURCE_FILE_INDEX]);
+        Path outputCvsFile = Path.of(args[OUTPUT_CSV_INDEX] + CSV_RESULT_FILE);
 
         OperationFileService operationFileService = new OperationFileServiceImpl();
-        List<Operation> operations = operationFileService.read(fromFileName);
+        List<Path> inputFiles = operationFileService.listInputFiles(inputDir);
+
         List<OperationDataResult> operationDataResults = operationFileService
-                .convert(operations, monthIdentifier);
-        operationFileService.write(toFileName, operationDataResults, CSV_HEADER);
-        System.out.println("File written successfully.");
+                .filterOperationsByMonth(inputFiles);
+
+        boolean writeHeader = operationFileService.shouldWriteHeader(outputCvsFile);
+
+        operationFileService
+                .write(outputCvsFile.toString(), operationDataResults, CSV_HEADER, writeHeader);
+
+        System.out.println(FILES_WRITTEN_SUCCESSFULLY);
     }
 }
