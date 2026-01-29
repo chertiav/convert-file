@@ -19,6 +19,10 @@ public class OperationDataResult {
     private static final String TYPE_SUBSCRIPTION_CLEANING = "Abonnementsrengøring";
     private static final String TYPE_PERIODIC_TASKS = "Periodiske opgaver";
     public static final String UNKNOWN_TYPE = "UNKNOWN TYPE";
+    public static final int SALARY_MONTH_THRESHOLD = 12;
+    public static final int SALARY_PAYDAY_DECEMBER = 18;
+    public static final int DEFAULT_SALARY_PAYDAY = 19;
+    public static final int DAYS_ADDED_TO_GET_NEXT_MONTH = 25;
     private LocalDate date;
     private String time;
     private String location;
@@ -37,8 +41,8 @@ public class OperationDataResult {
         this.location = dataTask[1];
         this.duration = getDuration(operation.start(), operation.end());
         this.type = getType(color);
-        this.salaryMonth = date.getMonthValue();
-        this.salaryYear = date.getYear();
+        this.salaryMonth = getSalaryMonth(date);
+        this.salaryYear = getSalaryYear(date);
         this.color = color;
     }
 
@@ -75,5 +79,27 @@ public class OperationDataResult {
         } else {
             return UNKNOWN_TYPE;
         }
+    }
+
+    private static int getSalaryMonth(LocalDate date) {
+        int monthValue = date.getMonthValue();
+        int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
+                ? SALARY_PAYDAY_DECEMBER
+                : DEFAULT_SALARY_PAYDAY;
+
+        return date.getDayOfMonth() <= thresholdDay
+                ? monthValue
+                : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getMonthValue();
+    }
+
+    private static int getSalaryYear(LocalDate date) {
+        int monthValue = date.getMonthValue();
+        int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
+                ? SALARY_PAYDAY_DECEMBER
+                : DEFAULT_SALARY_PAYDAY;
+
+        return date.getDayOfMonth() <= thresholdDay
+                ? date.getYear()
+                : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getYear();
     }
 }

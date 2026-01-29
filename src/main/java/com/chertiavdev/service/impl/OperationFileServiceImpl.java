@@ -102,7 +102,7 @@ public class OperationFileServiceImpl implements OperationFileService {
         return operations.stream()
                 .map(OperationDataResult::new)
                 .filter(operationDataResult ->
-                        operationDataResult.getSalaryMonth() == monthIdentifier)
+                        operationDataResult.getDate().getMonthValue() == monthIdentifier)
                 .toList();
     }
 }
