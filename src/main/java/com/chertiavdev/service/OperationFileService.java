@@ -2,12 +2,22 @@ package com.chertiavdev.service;
 
 import com.chertiavdev.models.Operation;
 import com.chertiavdev.models.OperationDataResult;
+import java.nio.file.Path;
 import java.util.List;
 
 public interface OperationFileService {
+    List<Path> listInputFiles(Path inputDir);
+
     List<Operation> read(String fileName);
 
-    List<OperationDataResult> convert(List<Operation> operations, int monthIdentifier);
+    List<OperationDataResult> filterOperationsByMonth(List<Path> inputFiles);
 
-    void write(String toFileName, List<OperationDataResult> results, String csvHeader);
+    boolean shouldWriteHeader(Path outputCsv);
+
+    void write(
+            String toFileName,
+            List<OperationDataResult> results,
+            String csvHeader,
+            boolean writeHeader
+    );
 }

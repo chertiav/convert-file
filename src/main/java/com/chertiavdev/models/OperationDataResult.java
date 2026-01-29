@@ -26,17 +26,20 @@ public class OperationDataResult {
     private String type;
     private int salaryMonth;
     private int salaryYear;
+    private String color;
 
     public OperationDataResult(Operation operation) {
         String[] dataTask = operation.title().split("\\R");
         LocalDate date = convertToLocalDate(operation);
+        String color = operation.color();
         this.date = date;
         this.time = dataTask[0];
         this.location = dataTask[1];
         this.duration = getDuration(operation.start(), operation.end());
-        this.type = getType(operation.color());
+        this.type = getType(color);
         this.salaryMonth = date.getMonthValue();
         this.salaryYear = date.getYear();
+        this.color = color;
     }
 
     private static LocalDate convertToLocalDate(Operation operation) {
