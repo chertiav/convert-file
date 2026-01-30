@@ -5,6 +5,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,9 +14,11 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class OperationDataResult {
+    //#82B0FF
     private static final ZoneId zoneId = ZoneId.systemDefault();
-    private static final String COLOR_SUBSCRIPTION_CLEANING = "#080480";
-    private static final String COLOR_PERIODIC_TASKS = "#AFC713";
+    private static final List<String> COLOR_SUBSCRIPTION_CLEANING = List.of("#080480");
+    private static final List<String> COLOR_PERIODIC_TASKS =
+            List.of("#AFC713", "#82B0FF", "#AFC713");
     private static final String TYPE_SUBSCRIPTION_CLEANING = "Abonnementsrengøring";
     private static final String TYPE_PERIODIC_TASKS = "Periodiske opgaver";
     public static final String UNKNOWN_TYPE = "UNKNOWN TYPE";
@@ -46,7 +49,7 @@ public class OperationDataResult {
         this.color = color;
     }
 
-    private static LocalDate convertToLocalDate(Operation operation) {
+    private LocalDate convertToLocalDate(Operation operation) {
         return LocalDate.ofInstant(operation.start().toInstant(), zoneId);
     }
 
@@ -72,16 +75,26 @@ public class OperationDataResult {
         if (color == null) {
             return "";
         }
-        if (color.contains(COLOR_SUBSCRIPTION_CLEANING)) {
+        if (isSubscriptionCleaning(color)) {
             return TYPE_SUBSCRIPTION_CLEANING;
-        } else if (color.contains(COLOR_PERIODIC_TASKS)) {
+        } else if (isPeriodicTasks(color)) {
             return TYPE_PERIODIC_TASKS;
         } else {
             return UNKNOWN_TYPE;
         }
     }
 
-    private static int getSalaryMonth(LocalDate date) {
+    private boolean isSubscriptionCleaning(String color) {
+        return COLOR_SUBSCRIPTION_CLEANING
+                .stream().anyMatch(color::contains);
+    }
+
+    private boolean isPeriodicTasks(String color) {
+        return COLOR_PERIODIC_TASKS
+                .stream().anyMatch(color::contains);
+    }
+
+    private int getSalaryMonth(LocalDate date) {
         int monthValue = date.getMonthValue();
         int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
                 ? SALARY_PAYDAY_DECEMBER
@@ -92,7 +105,7 @@ public class OperationDataResult {
                 : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getMonthValue();
     }
 
-    private static int getSalaryYear(LocalDate date) {
+    private int getSalaryYear(LocalDate date) {
         int monthValue = date.getMonthValue();
         int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
                 ? SALARY_PAYDAY_DECEMBER
