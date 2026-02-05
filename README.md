@@ -1,7 +1,8 @@
 # Convert File
 
 A utility for converting JSON plan (budget) files into CSV format. The application scans a directory
-for files in the `YYYY-MM.json` format, filters operations, and saves the results into a single CSV
+for files in the `YYYY-MM.json` format, filters planOperations, and saves the results into a single
+CSV
 file.
 
 ## Tech Stack

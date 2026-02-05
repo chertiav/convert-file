@@ -1,42 +1,112 @@
 package com.chertiavdev;
 
-import com.chertiavdev.models.OperationDataResult;
-import com.chertiavdev.service.OperationFileService;
-import com.chertiavdev.service.impl.OperationFileServiceImpl;
+import com.chertiavdev.dto.operation.OperationDataResult;
+import com.chertiavdev.dto.operation.OperationDto;
+import com.chertiavdev.enums.Mode;
+import com.chertiavdev.service.FileConverterService;
+import com.chertiavdev.service.FileReaderService;
+import com.chertiavdev.service.FileWriterService;
+import com.chertiavdev.service.InputFileListingService;
+import com.chertiavdev.service.impl.FileConverterServiceImpl;
+import com.chertiavdev.service.impl.FileReaderServiceImpl;
+import com.chertiavdev.service.impl.FileWriterServiceImpl;
+import com.chertiavdev.service.impl.InputFileListingServiceImpl;
+import com.chertiavdev.stgategy.FileConverterStrategy;
+import com.chertiavdev.stgategy.FileConverterStrategyImpl;
+import com.chertiavdev.stgategy.InputFileFilterStrategy;
+import com.chertiavdev.stgategy.InputFileFilterStrategyImpl;
+import com.chertiavdev.stgategy.ReadFileStrategy;
+import com.chertiavdev.stgategy.ReadFileStrategyImpl;
+import com.chertiavdev.stgategy.converter.FactFileConverter;
+import com.chertiavdev.stgategy.converter.FileConverterHandler;
+import com.chertiavdev.stgategy.converter.PlanFileConverter;
+import com.chertiavdev.stgategy.filter.FactInputFileFilter;
+import com.chertiavdev.stgategy.filter.FilterHandler;
+import com.chertiavdev.stgategy.filter.PlanInputFileFilter;
+import com.chertiavdev.stgategy.read.FactReadFile;
+import com.chertiavdev.stgategy.read.PlanReadFile;
+import com.chertiavdev.stgategy.read.ReadFileHandler;
 import java.nio.file.Path;
 import java.util.List;
+import java.util.Map;
 
 public class Main {
-
-    private static final String PLEASE_PROVIDE_A_SINGLE_ARGUMENT_WITH_A_FILENAME =
-            "Please provide a single argument with a filename.";
-    private static final String CSV_RESULT_FILE = "/result.csv";
-    private static final String CSV_HEADER =
-            "date,time,location,duration,type,salaryMonth,salaryYear,color";
-    private static final int EXPECTED_ARG_COUNT = 2;
-    public static final int SOURCE_FILE_INDEX = 0;
-    public static final int OUTPUT_CSV_INDEX = 1;
-    public static final String FILES_WRITTEN_SUCCESSFULLY = "Files written successfully.";
+    private static final String USAGE = """
+            Usage:
+              convert-file --plan <inputDir> <outputDir>   // .json input files
+              convert-file --fact <inputDir> <outputDir>   // .txt input files
+              convert-file --help                          // show help
+            """;
+    private static final String USAGE_CONVERT_FILE_PLAN_FACT_INPUT_DIR_OUTPUT_DIR =
+            "Usage: convert-file --plan|--fact <inputDir> <outputDir>";
+    private static final String CSV_RESULT_FILE = "/result-%s.csv";
+    private static final int EXPECTED_ARG_COUNT = 3;
+    private static final int MODE_INDEX = 0;
+    private static final int INPUT_DIR_INDEX = 1;
+    private static final int OUTPUT_DIR_INDEX = 2;
+    private static final String FILES_WRITTEN_SUCCESSFULLY = "Files written successfully.";
 
     public static void main(String[] args) {
-        if (args.length != EXPECTED_ARG_COUNT) {
-            throw new IllegalArgumentException(PLEASE_PROVIDE_A_SINGLE_ARGUMENT_WITH_A_FILENAME);
+        if (args.length == 1 && "--help".equals(args[0])) {
+            System.out.println(USAGE);
+            return;
         }
 
-        Path inputDir = Path.of(args[SOURCE_FILE_INDEX]);
-        Path outputCvsFile = Path.of(args[OUTPUT_CSV_INDEX] + CSV_RESULT_FILE);
+        if (args.length != EXPECTED_ARG_COUNT) {
+            throw new IllegalArgumentException(USAGE_CONVERT_FILE_PLAN_FACT_INPUT_DIR_OUTPUT_DIR);
+        }
 
-        OperationFileService operationFileService = new OperationFileServiceImpl();
-        List<Path> inputFiles = operationFileService.listInputFiles(inputDir);
+        Mode mode = Mode.fromArg(args[MODE_INDEX]);
+        Path inputDir = Path.of(args[INPUT_DIR_INDEX]);
+        String outputCsvPath = args[OUTPUT_DIR_INDEX]
+                + String.format(CSV_RESULT_FILE, mode.name().toLowerCase());
 
-        List<OperationDataResult> operationDataResults = operationFileService
-                .filterOperationsByMonth(inputFiles);
+        InputFileListingService listingService = getInputFileListingService();
+        List<Path> inputFiles = listingService.getFilePaths(mode, inputDir);
+        System.out.println(inputFiles);
 
-        boolean writeHeader = operationFileService.shouldWriteHeader(outputCvsFile);
+        FileReaderService fileReaderService = getFileReaderService();
+        FileConverterService dataConverter = getDataConverterService(fileReaderService);
 
-        operationFileService
-                .write(outputCvsFile.toString(), operationDataResults, CSV_HEADER, writeHeader);
+        List<OperationDataResult> operationDataResults = dataConverter
+                .convertAllFiles(mode, inputFiles);
+
+        FileWriterService fileService = new FileWriterServiceImpl(outputCsvPath);
+        fileService.write(operationDataResults);
 
         System.out.println(FILES_WRITTEN_SUCCESSFULLY);
+    }
+
+    private static InputFileListingService getInputFileListingService() {
+        Map<Mode, FilterHandler> filterHandlerMap = Map.of(
+                Mode.PLAN, new PlanInputFileFilter(),
+                Mode.FACT, new FactInputFileFilter()
+        );
+        InputFileFilterStrategy inputFileFilterStrategy =
+                new InputFileFilterStrategyImpl(filterHandlerMap);
+        return new InputFileListingServiceImpl(inputFileFilterStrategy);
+    }
+
+    private static FileReaderService getFileReaderService() {
+        Map<Mode, ReadFileHandler<? extends OperationDto>> readFileHandlerMap = Map.of(
+                Mode.PLAN, new PlanReadFile(),
+                Mode.FACT, new FactReadFile()
+        );
+
+        ReadFileStrategy readFileStrategy = new ReadFileStrategyImpl(readFileHandlerMap);
+        return new FileReaderServiceImpl(readFileStrategy);
+    }
+
+    private static FileConverterService getDataConverterService(
+            FileReaderService fileReaderService
+    ) {
+        Map<Mode, FileConverterHandler> fileConverterHandlerMap = Map.of(
+                Mode.PLAN, new PlanFileConverter(fileReaderService),
+                Mode.FACT, new FactFileConverter(fileReaderService)
+        );
+
+        FileConverterStrategy fileConverterStrategy =
+                new FileConverterStrategyImpl(fileConverterHandlerMap);
+        return new FileConverterServiceImpl(fileConverterStrategy);
     }
 }

@@ -1,33 +1,25 @@
 package com.chertiavdev.util;
 
-import com.chertiavdev.models.OperationDataResult;
-import java.util.List;
+import java.time.Duration;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 public final class ServiceUtils {
-    private static final String JSON_EXTENSION = ".json";
-    private static final char CSV_SEPARATOR = ',';
-    private static final char CSV_RECORD_END = '\n';
-    private static final String FILENAME_MUST_NOT_BE_NULL_OR_BLANK =
-            "Filename must not be null or blank.";
-    private static final String FILENAME_MUST_CONTAIN_MONTH_JSON =
-            "Filename must contain '-<month>.json': ";
-    public static final String MONTH_PART_IS_NOT_A_NUMBER = "Month part is not a number: ";
-    public static final char DASH_CHAR = '-';
+    private static final String DOT_CHARA = ".";
+
+    private static final String MONTH_PART_IS_NOT_A_NUMBER = "Month part is not a number: ";
+    private static final char DASH_CHAR = '-';
+    private static final String INVALID_DURATION_FORMAT = "Invalid duration format: ";
+    private static final String HOURS_MINUTES_SECONDS_FORMAT = "%d:%02d:%02d";
 
     private ServiceUtils() {
     }
 
     public static int extractMonthFromFilename(String fileName) {
-        if (fileName == null || fileName.isBlank()) {
-            throw new IllegalArgumentException(FILENAME_MUST_NOT_BE_NULL_OR_BLANK);
-        }
         int dashIndex = fileName.lastIndexOf(DASH_CHAR);
-        int extIndex = fileName.lastIndexOf(JSON_EXTENSION);
-        if (dashIndex < 0 || extIndex < 0 || extIndex <= dashIndex + 1) {
-            throw new IllegalArgumentException(FILENAME_MUST_CONTAIN_MONTH_JSON + fileName);
-        }
-
+        int extIndex = fileName.lastIndexOf(DOT_CHARA);
         String monthPart = fileName.substring(dashIndex + 1, extIndex);
+
         try {
             return Integer.parseInt(monthPart);
         } catch (NumberFormatException e) {
@@ -35,48 +27,38 @@ public final class ServiceUtils {
         }
     }
 
-    public static String formatForCsv(Object value) {
-        if (value == null) {
-            return "";
-        }
-        String stringValue = String.valueOf(value);
-        if (stringValue.contains("\"")
-                || stringValue.contains(",")
-                || stringValue.contains("\n")
-                || stringValue.contains("\r")
-        ) {
-            stringValue = stringValue.replace("\"", "\"\"");
-            return "\"" + stringValue + "\"";
-        }
-        return stringValue;
+    public static String formatDuration(String isoDuration) {
+        return formatDuration(Duration.parse(isoDuration));
     }
 
-    public static String buildCsv(
-            List<OperationDataResult> operationDataResults,
-            String csvHeader
-    ) {
-        StringBuilder sb = new StringBuilder();
-        sb.append(csvHeader).append(CSV_RECORD_END);
+    public static String formatDuration(Duration durationValue) {
+        long totalSeconds = durationValue.getSeconds();
 
-        for (OperationDataResult record : operationDataResults) {
-            sb.append(formatForCsv(record.getDate()))
-                    .append(CSV_SEPARATOR)
-                    .append(formatForCsv(record.getTime()))
-                    .append(CSV_SEPARATOR)
-                    .append(formatForCsv(record.getLocation()))
-                    .append(CSV_SEPARATOR)
-                    .append(formatForCsv(record.getDuration()))
-                    .append(CSV_SEPARATOR)
-                    .append(formatForCsv(record.getType()))
-                    .append(CSV_SEPARATOR)
-                    .append(record.getSalaryMonth())
-                    .append(CSV_SEPARATOR)
-                    .append(record.getSalaryYear())
-                    .append(CSV_SEPARATOR)
-                    .append(record.getColor())
-                    .append(CSV_RECORD_END);
+        long hours = totalSeconds / 3600;
+        long minutes = (totalSeconds % 3600) / 60;
+        long seconds = totalSeconds % 60;
+
+        return String.format(HOURS_MINUTES_SECONDS_FORMAT, hours, minutes, seconds);
+    }
+
+    public static Duration parseDuration(String raw, Pattern pattern) {
+        if (raw == null || raw.isBlank()) {
+            return Duration.ZERO;
         }
+        Matcher m = pattern.matcher(raw.trim());
+        if (!m.matches()) {
+            throw new IllegalArgumentException(INVALID_DURATION_FORMAT + raw);
+        }
+        long hours = m.group(1) != null ? Long.parseLong(m.group(1)) : 0;
+        long minutes = m.group(2) != null ? Long.parseLong(m.group(2)) : 0;
+        return Duration.ofHours(hours).plusMinutes(minutes);
+    }
 
-        return sb.toString();
+    public static double parseDecimal(String raw) {
+        if (raw == null || raw.isBlank()) {
+            return 0.0;
+        }
+        String normalized = raw.trim().replace(',', '.');
+        return Double.parseDouble(normalized);
     }
 }
