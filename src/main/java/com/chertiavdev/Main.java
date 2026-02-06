@@ -4,7 +4,7 @@ import static com.chertiavdev.factory.AppFactory.fileConverterService;
 import static com.chertiavdev.factory.AppFactory.fileReaderService;
 import static com.chertiavdev.factory.AppFactory.inputFileListingService;
 
-import com.chertiavdev.dto.operation.result.OperationDataResult;
+import com.chertiavdev.dto.result.OperationDataResult;
 import com.chertiavdev.enums.Mode;
 import com.chertiavdev.service.FileConverterService;
 import com.chertiavdev.service.FileReaderService;
@@ -30,7 +30,7 @@ public class Main {
     private static final int OUTPUT_DIR_INDEX = 2;
     private static final String FILES_WRITTEN_SUCCESSFULLY = "Files written successfully.";
 
-    public static void main(String[] args) {
+    static void main(String[] args) {
         if (args.length == 1 && "--help".equals(args[FIRST_ARG_INDEX])) {
             System.out.println(USAGE);
             return;

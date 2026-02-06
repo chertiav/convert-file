@@ -20,9 +20,9 @@ import com.chertiavdev.strategy.converter.PlanFileConverter;
 import com.chertiavdev.strategy.filter.FactInputFileFilter;
 import com.chertiavdev.strategy.filter.FilterHandler;
 import com.chertiavdev.strategy.filter.PlanInputFileFilter;
-import com.chertiavdev.strategy.read.FactReadFile;
-import com.chertiavdev.strategy.read.PlanReadFile;
-import com.chertiavdev.strategy.read.ReadFileHandler;
+import com.chertiavdev.strategy.reader.FactReadFile;
+import com.chertiavdev.strategy.reader.PlanReadFile;
+import com.chertiavdev.strategy.reader.ReadFileHandler;
 import java.util.Map;
 
 public final class AppFactory {

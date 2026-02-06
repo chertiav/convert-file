@@ -1,4 +1,4 @@
-package com.chertiavdev.dto.operation.result;
+package com.chertiavdev.dto.result;
 
 import com.chertiavdev.dto.operation.OperationDto;
 import com.chertiavdev.dto.operation.fact.FactOperationDto;

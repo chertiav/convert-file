@@ -4,7 +4,7 @@ import com.chertiavdev.dto.operation.OperationDto;
 import com.chertiavdev.enums.Mode;
 import com.chertiavdev.service.FileReaderService;
 import com.chertiavdev.strategy.ReadFileStrategy;
-import com.chertiavdev.strategy.read.ReadFileHandler;
+import com.chertiavdev.strategy.reader.ReadFileHandler;
 import java.util.List;
 
 public class FileReaderServiceImpl implements FileReaderService {

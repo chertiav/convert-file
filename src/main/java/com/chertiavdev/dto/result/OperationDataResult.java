@@ -1,4 +1,4 @@
-package com.chertiavdev.dto.operation.result;
+package com.chertiavdev.dto.result;
 
 import static com.chertiavdev.util.ServiceUtils.formatDuration;
 

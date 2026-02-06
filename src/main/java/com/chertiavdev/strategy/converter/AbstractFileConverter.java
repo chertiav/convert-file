@@ -3,8 +3,8 @@ package com.chertiavdev.strategy.converter;
 import static com.chertiavdev.util.ServiceUtils.extractMonthFromFilename;
 
 import com.chertiavdev.dto.operation.OperationDto;
-import com.chertiavdev.dto.operation.result.OperationDataResult;
-import com.chertiavdev.dto.operation.result.OperationDataResultFactory;
+import com.chertiavdev.dto.result.OperationDataResult;
+import com.chertiavdev.dto.result.OperationDataResultFactory;
 import com.chertiavdev.enums.Mode;
 import com.chertiavdev.service.FileReaderService;
 import java.nio.file.Path;

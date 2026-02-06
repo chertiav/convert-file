@@ -1,6 +1,6 @@
 package com.chertiavdev.service.impl;
 
-import com.chertiavdev.dto.operation.result.OperationDataResult;
+import com.chertiavdev.dto.result.OperationDataResult;
 import com.chertiavdev.exceptions.FileNotWrittenException;
 import com.chertiavdev.service.FileWriterService;
 import java.io.BufferedWriter;
