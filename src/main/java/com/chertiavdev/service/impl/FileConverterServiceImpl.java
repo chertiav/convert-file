@@ -1,6 +1,6 @@
 package com.chertiavdev.service.impl;
 
-import com.chertiavdev.dto.operation.OperationDataResult;
+import com.chertiavdev.dto.operation.result.OperationDataResult;
 import com.chertiavdev.enums.Mode;
 import com.chertiavdev.service.FileConverterService;
 import com.chertiavdev.strategy.FileConverterStrategy;

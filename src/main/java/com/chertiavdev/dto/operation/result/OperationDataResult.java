@@ -1,8 +1,9 @@
-package com.chertiavdev.dto.operation;
+package com.chertiavdev.dto.operation.result;
 
 import static com.chertiavdev.util.ServiceUtils.formatDuration;
 
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
+import com.chertiavdev.dto.operation.plan.PlanOperationDto;
 import com.chertiavdev.enums.Mode;
 import java.time.Duration;
 import java.time.LocalDate;

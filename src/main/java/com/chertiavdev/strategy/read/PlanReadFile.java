@@ -1,6 +1,6 @@
 package com.chertiavdev.strategy.read;
 
-import com.chertiavdev.dto.operation.PlanOperationDto;
+import com.chertiavdev.dto.operation.plan.PlanOperationDto;
 import com.chertiavdev.exceptions.FileNotOpenedException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;

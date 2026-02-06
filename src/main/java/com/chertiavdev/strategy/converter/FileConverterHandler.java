@@ -1,6 +1,6 @@
 package com.chertiavdev.strategy.converter;
 
-import com.chertiavdev.dto.operation.OperationDataResult;
+import com.chertiavdev.dto.operation.result.OperationDataResult;
 import java.nio.file.Path;
 import java.util.List;
 

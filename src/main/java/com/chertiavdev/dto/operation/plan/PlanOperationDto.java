@@ -1,5 +1,6 @@
-package com.chertiavdev.dto.operation;
+package com.chertiavdev.dto.operation.plan;
 
+import com.chertiavdev.dto.operation.OperationDto;
 import java.util.Date;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
