@@ -1,8 +1,8 @@
-package com.chertiavdev.stgategy;
+package com.chertiavdev.strategy;
 
 import com.chertiavdev.dto.operation.OperationDto;
 import com.chertiavdev.enums.Mode;
-import com.chertiavdev.stgategy.read.ReadFileHandler;
+import com.chertiavdev.strategy.read.ReadFileHandler;
 import java.util.Map;
 
 public class ReadFileStrategyImpl implements ReadFileStrategy {

@@ -1,4 +1,4 @@
-package com.chertiavdev.stgategy.read;
+package com.chertiavdev.strategy.read;
 
 import com.chertiavdev.dto.operation.PlanOperationDto;
 import com.chertiavdev.exceptions.FileNotOpenedException;

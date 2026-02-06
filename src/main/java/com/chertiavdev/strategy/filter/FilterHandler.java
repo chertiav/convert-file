@@ -1,4 +1,4 @@
-package com.chertiavdev.stgategy.filter;
+package com.chertiavdev.strategy.filter;
 
 import java.nio.file.Path;
 

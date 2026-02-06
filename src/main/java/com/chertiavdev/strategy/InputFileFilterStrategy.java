@@ -1,7 +1,7 @@
-package com.chertiavdev.stgategy;
+package com.chertiavdev.strategy;
 
 import com.chertiavdev.enums.Mode;
-import com.chertiavdev.stgategy.filter.FilterHandler;
+import com.chertiavdev.strategy.filter.FilterHandler;
 
 public interface InputFileFilterStrategy {
     FilterHandler get(Mode mode);

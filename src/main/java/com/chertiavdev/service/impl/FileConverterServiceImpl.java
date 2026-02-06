@@ -3,8 +3,8 @@ package com.chertiavdev.service.impl;
 import com.chertiavdev.dto.operation.OperationDataResult;
 import com.chertiavdev.enums.Mode;
 import com.chertiavdev.service.FileConverterService;
-import com.chertiavdev.stgategy.FileConverterStrategy;
-import com.chertiavdev.stgategy.converter.FileConverterHandler;
+import com.chertiavdev.strategy.FileConverterStrategy;
+import com.chertiavdev.strategy.converter.FileConverterHandler;
 import java.nio.file.Path;
 import java.util.List;
 

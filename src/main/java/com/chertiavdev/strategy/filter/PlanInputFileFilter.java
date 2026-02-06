@@ -1,10 +1,10 @@
-package com.chertiavdev.stgategy.filter;
+package com.chertiavdev.strategy.filter;
 
 import java.nio.file.Path;
 import java.util.regex.Pattern;
 
-public class FactInputFileFilter implements FilterHandler {
-    private static final Pattern INPUT_FILE_PATTERN = Pattern.compile("\\d{4}-\\d{2}\\.txt");
+public class PlanInputFileFilter implements FilterHandler {
+    private static final Pattern INPUT_FILE_PATTERN = Pattern.compile("\\d{4}-\\d{2}\\.json");
 
     @Override
     public boolean isValid(Path path) {

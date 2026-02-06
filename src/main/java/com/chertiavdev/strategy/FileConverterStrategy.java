@@ -1,7 +1,7 @@
-package com.chertiavdev.stgategy;
+package com.chertiavdev.strategy;
 
 import com.chertiavdev.enums.Mode;
-import com.chertiavdev.stgategy.converter.FileConverterHandler;
+import com.chertiavdev.strategy.converter.FileConverterHandler;
 
 public interface FileConverterStrategy {
     FileConverterHandler get(Mode mode);

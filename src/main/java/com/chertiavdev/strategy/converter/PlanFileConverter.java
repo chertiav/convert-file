@@ -1,4 +1,4 @@
-package com.chertiavdev.stgategy.converter;
+package com.chertiavdev.strategy.converter;
 
 import static com.chertiavdev.util.ServiceUtils.extractMonthFromFilename;
 

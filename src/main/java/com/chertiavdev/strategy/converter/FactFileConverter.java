@@ -1,4 +1,4 @@
-package com.chertiavdev.stgategy.converter;
+package com.chertiavdev.strategy.converter;
 
 import static com.chertiavdev.util.ServiceUtils.extractMonthFromFilename;
 
@@ -9,6 +9,7 @@ import com.chertiavdev.service.FileReaderService;
 import java.nio.file.Path;
 import java.util.Comparator;
 import java.util.List;
+import java.util.function.Predicate;
 import java.util.stream.Stream;
 
 public class FactFileConverter implements FileConverterHandler {
@@ -43,8 +44,12 @@ public class FactFileConverter implements FileConverterHandler {
     ) {
         return operations.stream()
                 .map(OperationDataResult::new)
-                .filter(operationDataResult ->
-                        operationDataResult.getDate().getMonthValue() == monthIdentifier)
+                .filter(filterByMonth(monthIdentifier))
                 .toList();
+    }
+
+    private Predicate<OperationDataResult> filterByMonth(int monthIdentifier) {
+        return operationDataResult ->
+                operationDataResult.getDate().getMonthValue() == monthIdentifier;
     }
 }
