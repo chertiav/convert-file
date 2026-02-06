@@ -17,7 +17,8 @@ public class FileReaderServiceImpl implements FileReaderService {
     @SuppressWarnings("unchecked")
     @Override
     public <T extends OperationDto> List<T> read(Mode mode, String fileName) {
-        ReadFileHandler<? extends OperationDto> handler = readFileStrategy.get(mode);
-        return (List<T>) handler.read(fileName);
+        ReadFileHandler<?> raw = readFileStrategy.get(mode);
+        ReadFileHandler<T> handler = (ReadFileHandler<T>) raw;
+        return handler.read(fileName);
     }
 }

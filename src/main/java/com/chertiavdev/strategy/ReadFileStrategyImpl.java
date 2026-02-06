@@ -6,22 +6,34 @@ import com.chertiavdev.strategy.read.ReadFileHandler;
 import java.util.Map;
 
 public class ReadFileStrategyImpl implements ReadFileStrategy {
-    public static final String NO_READ_FILE_HANDLER_CONFIGURED_FOR_MODE =
+    private static final String NO_READ_FILE_HANDLER_CONFIGURED_FOR_MODE =
             "No ReadFileHandler configured for mode: ";
-    private final Map<Mode, ReadFileHandler<? extends OperationDto>> readFileHandlerMap;
+    private static final String NULL_MODE_ERROR_MESSAGE = "mode must not be null";
+    private final Map<Mode, ReadFileHandler<?>> readFileHandlerMap;
 
-    public ReadFileStrategyImpl(
-            Map<Mode, ReadFileHandler<? extends OperationDto>> readFileHandlerMap
-    ) {
-        this.readFileHandlerMap = readFileHandlerMap;
+    public ReadFileStrategyImpl(Map<Mode, ReadFileHandler<?>> readFileHandlerMap) {
+        this.readFileHandlerMap = Map.copyOf(readFileHandlerMap);
+
+        for (Mode mode : Mode.values()) {
+            if (!this.readFileHandlerMap.containsKey(mode)) {
+                throw new IllegalStateException(NO_READ_FILE_HANDLER_CONFIGURED_FOR_MODE + mode);
+            }
+        }
     }
 
     @Override
-    public ReadFileHandler<? extends OperationDto> get(Mode mode) {
-        ReadFileHandler<? extends OperationDto> handler = readFileHandlerMap.get(mode);
-        if (handler == null) {
-            throw new IllegalArgumentException(NO_READ_FILE_HANDLER_CONFIGURED_FOR_MODE + mode);
+    public <T extends OperationDto> ReadFileHandler<T> get(Mode mode) {
+        if (mode == null) {
+            throw new IllegalArgumentException(NULL_MODE_ERROR_MESSAGE);
         }
-        return handler;
+
+        ReadFileHandler<?> handler = readFileHandlerMap.get(mode);
+        if (handler == null) {
+            throw new IllegalStateException(NO_READ_FILE_HANDLER_CONFIGURED_FOR_MODE + mode);
+        }
+
+        @SuppressWarnings("unchecked")
+        ReadFileHandler<T> typed = (ReadFileHandler<T>) handler;
+        return typed;
     }
 }

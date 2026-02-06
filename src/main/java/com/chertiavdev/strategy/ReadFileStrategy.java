@@ -5,5 +5,5 @@ import com.chertiavdev.enums.Mode;
 import com.chertiavdev.strategy.read.ReadFileHandler;
 
 public interface ReadFileStrategy {
-    ReadFileHandler<? extends OperationDto> get(Mode mode);
+    <T extends OperationDto> ReadFileHandler<T> get(Mode mode);
 }
