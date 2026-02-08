@@ -4,10 +4,12 @@ import com.chertiavdev.dto.operation.OperationDto;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
+import lombok.Getter;
+import lombok.Setter;
 
-@Data
+@Getter
+@Setter
 @EqualsAndHashCode(callSuper = true)
 public class FactOperationDto extends OperationDto {
     private String type;

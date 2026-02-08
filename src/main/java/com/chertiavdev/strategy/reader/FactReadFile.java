@@ -23,7 +23,7 @@ public class FactReadFile implements ReadFileHandler<FactOperationDto> {
             return records.stream()
                     .map(FactOperationRawParser::parse)
                     .flatMap(Optional::stream)
-                    .map(FactOperationMapper.INSTANCE::toDto)
+                    .map(FactOperationMapper.INSTANCE::toFactOperationDto)
                     .toList();
         } catch (IOException e) {
             throw new FileNotOpenedException(FILE_NOT_OPENED_ERROR_MESSAGE + fileName, e);

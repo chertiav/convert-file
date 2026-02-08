@@ -52,7 +52,7 @@ public interface FactOperationMapper {
     @Mapping(target = "extra", expression =
             "java(com.chertiavdev.util.ServiceUtils.parseDecimal(raw.extra()))"
     )
-    FactOperationDto toDto(FactOperationRawDto raw);
+    FactOperationDto toFactOperationDto(FactOperationRawDto raw);
 
     default Duration calculateDuration(String durationRaw) {
         ExtraDuration extraDuration = extractExtraDuration(durationRaw);

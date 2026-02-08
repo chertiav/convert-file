@@ -1,5 +1,8 @@
 package com.chertiavdev.enums;
 
+import lombok.Getter;
+
+@Getter
 public enum Mode {
     PLAN("--plan"),
     FACT("--fact");
@@ -8,10 +11,6 @@ public enum Mode {
 
     Mode(String flag) {
         this.flag = flag;
-    }
-
-    public String getFlag() {
-        return flag;
     }
 
     public static Mode fromArg(String type) {

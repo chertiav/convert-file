@@ -5,12 +5,11 @@ import static com.chertiavdev.util.ServiceUtils.formatDuration;
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
 import com.chertiavdev.dto.operation.plan.PlanOperationDto;
 import com.chertiavdev.enums.Mode;
+import com.chertiavdev.enums.OperationType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
-import java.util.Date;
-import java.util.List;
 import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import lombok.Setter;
@@ -19,12 +18,6 @@ import lombok.Setter;
 @Setter
 @EqualsAndHashCode
 public class OperationDataResult {
-    private static final List<String> COLOR_SUBSCRIPTION_CLEANING = List.of("#080480");
-    private static final List<String> COLOR_PERIODIC_TASKS =
-            List.of("#AFC713", "#82B0FF", "#AFC71388");
-    private static final String TYPE_SUBSCRIPTION_CLEANING = "Abonnementsrengøring";
-    private static final String TYPE_PERIODIC_TASKS = "Periodiske opgaver";
-    private static final String UNKNOWN_TYPE = "UNKNOWN TYPE";
     private static final int SALARY_MONTH_THRESHOLD = 12;
     private static final int SALARY_PAYDAY_DECEMBER = 18;
     private static final int DEFAULT_SALARY_PAYDAY = 19;
@@ -61,7 +54,7 @@ public class OperationDataResult {
         this.location = dataTask[1];
         this.mode = Mode.PLAN.name().toLowerCase();
         this.duration = getDuration(planOperation.getStart(), planOperation.getEnd());
-        this.type = getType(color);
+        this.type = OperationType.fromColor(color).getType();
         this.salaryMonth = getSalaryMonth(date);
         this.salaryYear = getSalaryYear(date);
         this.shiftType = "Fast";
@@ -130,37 +123,13 @@ public class OperationDataResult {
     }
 
     private LocalDate convertToLocalDate(PlanOperationDto planOperation) {
-        return LocalDate.ofInstant(planOperation.getStart().toInstant(), ZONE_ID);
+        return planOperation.getStart()
+                .atZone(ZONE_ID)
+                .toLocalDate();
     }
 
-    private String getDuration(Date start, Date end) {
-        LocalDateTime startDateTime = LocalDateTime.ofInstant(start.toInstant(), ZONE_ID);
-        LocalDateTime endDateTime = LocalDateTime.ofInstant(end.toInstant(), ZONE_ID);
-
-        return formatDuration(Duration.between(startDateTime, endDateTime));
-    }
-
-    private String getType(String color) {
-        if (color == null) {
-            return "";
-        }
-        if (isSubscriptionCleaning(color)) {
-            return TYPE_SUBSCRIPTION_CLEANING;
-        } else if (isPeriodicTasks(color)) {
-            return TYPE_PERIODIC_TASKS;
-        } else {
-            return UNKNOWN_TYPE;
-        }
-    }
-
-    private boolean isSubscriptionCleaning(String color) {
-        return COLOR_SUBSCRIPTION_CLEANING
-                .stream().anyMatch(color::contains);
-    }
-
-    private boolean isPeriodicTasks(String color) {
-        return COLOR_PERIODIC_TASKS
-                .stream().anyMatch(color::contains);
+    private String getDuration(LocalDateTime start, LocalDateTime end) {
+        return formatDuration(Duration.between(start, end));
     }
 
     private int getSalaryMonth(LocalDate date) {

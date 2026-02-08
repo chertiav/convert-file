@@ -1,8 +1,9 @@
-package com.chertiavdev.dto.result;
+package com.chertiavdev.factory;
 
 import com.chertiavdev.dto.operation.OperationDto;
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
 import com.chertiavdev.dto.operation.plan.PlanOperationDto;
+import com.chertiavdev.dto.result.OperationDataResult;
 
 public final class OperationDataResultFactory {
     private OperationDataResultFactory() {
