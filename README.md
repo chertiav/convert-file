@@ -1,25 +1,26 @@
 # Convert File
 
-A utility for converting JSON plan (budget) files into CSV format. The application scans a directory
-for files in the `YYYY-MM.json` format, filters operations, and saves the results into a single CSV
-file.
+A utility for converting plan (budget) and fact data files into CSV format. The application scans a
+directory for files in the `YYYY-MM.json` (for plans) or `YYYY-MM.txt` (for facts) format, processes
+them, and saves the results into a single CSV file.
 
 ## Tech Stack
 
-- **Language:** Java 17
+- **Language:** Java 25
 - **Build Tool:** Maven
 - **Libraries:**
-    - [Jackson](https://github.com/FasterXML/jackson) — for JSON parsing.
-    - [Lombok](https://projectlombok.org/) — to reduce boilerplate code.
+    - [Jackson](https://github.com/FasterXML/jackson) — JSON parsing.
+    - [Lombok](https://projectlombok.org/) — boilerplate code generation.
+    - [MapStruct](https://mapstruct.org/) — object mapping.
 
 ## Requirements
 
-- Java Development Kit (JDK) 17 or higher.
+- Java Development Kit (JDK) 25 or higher.
 - Apache Maven 3.6 or higher.
 
 ## Build and Installation
 
-To build the project into an executable JAR file, follow these steps:
+To build the project into an executable JAR file, run the following:
 
 1. **Clone the repository** (if not already done):
    ```bash
@@ -27,44 +28,98 @@ To build the project into an executable JAR file, follow these steps:
    cd convert-file
    ```
 
-2. **Build the project using Maven**:
+2. **Build the project**:
    ```bash
    mvn clean package
    ```
 
-After the build is complete, a `convert-file.jar` file will be created in the `target/` directory,
-containing all necessary dependencies.
+After the build, a `convert-file.jar` file containing all necessary dependencies will be created in
+the `target/` directory.
 
-## Run
+## Running the Application
 
-The application accepts two command-line arguments:
+The application supports two modes of operation: processing plans and processing fact data.
 
-1. Path to the directory with input JSON files.
-2. Path to the output CSV file.
+**Command-line arguments:**
 
-### Run Example
+1. Mode flag: `--plan` or `--fact`.
+2. Path to the directory with input files.
+3. Path to the directory for saving the output CSV file.
+
+### Usage Examples
+
+**Processing plan data (JSON):**
 
 ```bash
-java -jar target/convert-file.jar "/path/to/monthly-plan-json/" "/path/to/output/"
+java -jar target/convert-file.jar --plan "/path/to/input-json-dir/" "/path/to/output-dir/"
 ```
 
-## Scripts and Commands
+*The result will be saved to `result-plan.csv`.*
 
-- `mvn clean` — clean the build directory (removes the `target` folder).
+**Processing fact data (TXT):**
+
+```bash
+java -jar target/convert-file.jar --fact "/path/to/input-txt-dir/" "/path/to/output-dir/"
+```
+
+*The result will be saved to `result-fact.csv`.*
+
+**Help:**
+
+```bash
+java -jar target/convert-file.jar --help
+```
+
+## Input Data Examples
+
+### Plan (JSON)
+
+Files must have the `.json` extension and follow this format:
+
+```json
+[
+  {
+    "id": 1234567,
+    "title": "08:00 To 09:00 \nMock Task Description\nJohn Doe\n1 hour(s) and 0 min.\nTask Comment!",
+    "start": "2025-01-01T08:00:00",
+    "end": "2025-01-01T09:00:00",
+    "url": "func/seopg.php?ID=1234567",
+    "color": "#080480",
+    "textColor": "#ffffff",
+    "overlayOpacity": 0.6
+  }
+]
+```
+
+### Fact (TXT)
+
+Files must have the `.txt` extension and contain tab-separated records:
+
+```text
+Task Name	Package Name	Company Name	Type	01/01-2025 - Kl. 08:00	1h 00m	User Name		100,00	0,00	0,00	0,00	0,00
+```
+
+## Maven Commands
+
+- `mvn clean` — clean the build directory.
 - `mvn compile` — compile the source code.
-- `mvn package` — build the project and create a JAR file (including dependencies via
-  `maven-shade-plugin`).
-- `mvn -q -DskipTests package` — fast build without logs and skipping tests.
-- `mvn install` — build and install the artifact into the local Maven repository (
-  `~/.m2/repository`).
+- `mvn package` — build the project into a JAR file.
+- `mvn checkstyle:check` — check code style.
 
 ## Project Structure
 
 ```text
 src/main/java/com/chertiavdev/
-├── exceptions/         # Custom exceptions (FileNotOpenedException, etc.)
-├── models/             # Data models (Operation, OperationDataResult)
-├── service/            # Interfaces and implementation of file processing logic
-├── util/               # Utility classes (ServiceUtils)
+├── config/             # Configuration (ObjectMapper, etc.)
+├── domain/             # Enums and domain entities (Mode, OperationType)
+├── dto/                # Data Transfer Objects (OperationDto, ResultDto)
+├── exceptions/         # Custom exceptions
+├── export/             # Export logic (CSV formatting)
+├── factory/            # Factory for service creation (AppFactory)
+├── mapper/             # MapStruct interfaces for object transformation
+├── parser/             # Specific format parsers
+├── service/            # Service layer (file processing logic)
+├── strategy/           # Strategies for reading, filtering, and writing data
+├── util/               # Utilities (DateTimeHelper)
 └── Main.java           # Application entry point
 ```
