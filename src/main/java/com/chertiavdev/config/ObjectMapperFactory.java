@@ -1,4 +1,4 @@
-package com.chertiavdev.factory;
+package com.chertiavdev.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;

@@ -3,7 +3,7 @@ package com.chertiavdev.strategy.reader;
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
 import com.chertiavdev.exceptions.FileNotOpenedException;
 import com.chertiavdev.mapper.FactOperationMapper;
-import com.chertiavdev.util.optional.FactOperationRawParser;
+import com.chertiavdev.parser.FactOperationRawParser;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;

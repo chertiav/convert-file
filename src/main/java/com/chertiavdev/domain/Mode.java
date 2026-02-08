@@ -1,4 +1,4 @@
-package com.chertiavdev.enums;
+package com.chertiavdev.domain;
 
 import lombok.Getter;
 

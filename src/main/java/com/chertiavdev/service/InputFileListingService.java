@@ -1,6 +1,6 @@
 package com.chertiavdev.service;
 
-import com.chertiavdev.enums.Mode;
+import com.chertiavdev.domain.Mode;
 import java.nio.file.Path;
 import java.util.List;
 

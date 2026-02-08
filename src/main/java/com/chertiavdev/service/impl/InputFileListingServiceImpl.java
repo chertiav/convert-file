@@ -1,6 +1,6 @@
 package com.chertiavdev.service.impl;
 
-import com.chertiavdev.enums.Mode;
+import com.chertiavdev.domain.Mode;
 import com.chertiavdev.exceptions.FileNotOpenedException;
 import com.chertiavdev.service.InputFileListingService;
 import com.chertiavdev.strategy.InputFileFilterStrategy;

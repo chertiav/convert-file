@@ -1,6 +1,6 @@
 package com.chertiavdev.strategy;
 
-import com.chertiavdev.enums.Mode;
+import com.chertiavdev.domain.Mode;
 import com.chertiavdev.strategy.filter.FilterHandler;
 import java.util.Map;
 

@@ -1,10 +1,10 @@
 package com.chertiavdev.service;
 
+import com.chertiavdev.domain.Mode;
 import com.chertiavdev.dto.result.OperationDataResult;
-import com.chertiavdev.enums.Mode;
 import java.nio.file.Path;
 import java.util.List;
 
 public interface FileConverterService {
-    List<OperationDataResult> convertAllFiles(Mode mode, List<Path> inputFiles);
+    <T extends OperationDataResult> List<T> convertAllFiles(Mode mode, List<Path> inputFiles);
 }

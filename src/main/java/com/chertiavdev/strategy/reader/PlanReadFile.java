@@ -1,8 +1,8 @@
 package com.chertiavdev.strategy.reader;
 
+import com.chertiavdev.config.ObjectMapperFactory;
 import com.chertiavdev.dto.operation.plan.PlanOperationDto;
 import com.chertiavdev.exceptions.FileNotOpenedException;
-import com.chertiavdev.factory.ObjectMapperFactory;
 import com.fasterxml.jackson.core.type.TypeReference;
 import java.io.File;
 import java.util.List;

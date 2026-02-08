@@ -3,11 +3,14 @@ package com.chertiavdev.export.csv;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 
-public abstract class AbstractCsvWritable {
+public final class CsvFormatter {
     private static final char CSV_SEPARATOR = ',';
-    private static final String CSV_RECORD_END = "\r\\n";
+    private static final String CSV_RECORD_END = "\r\n";
 
-    protected String joinCsv(Object... values) {
+    private CsvFormatter() {
+    }
+
+    public static String joinCsv(Object... values) {
         StringBuilder sb = new StringBuilder();
 
         for (int i = 0; i < values.length; i++) {
@@ -20,7 +23,7 @@ public abstract class AbstractCsvWritable {
         return sb.toString();
     }
 
-    private String formatForCsv(Object value) {
+    public static String formatForCsv(Object value) {
         if (value == null) {
             return "";
         }

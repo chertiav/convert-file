@@ -2,7 +2,7 @@ package com.chertiavdev.mapper;
 
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
 import com.chertiavdev.dto.result.fact.FactResultDto;
-import com.chertiavdev.util.ServiceUtils;
+import com.chertiavdev.util.DateTimeHelper;
 import java.time.Duration;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
@@ -34,6 +34,6 @@ public interface FactResultMapper {
     }
 
     default String formatDurationSafe(Duration duration) {
-        return ServiceUtils.formatDuration(duration);
+        return DateTimeHelper.formatDuration(duration);
     }
 }

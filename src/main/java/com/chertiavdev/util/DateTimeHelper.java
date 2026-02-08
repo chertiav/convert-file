@@ -4,7 +4,7 @@ import java.time.Duration;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class ServiceUtils {
+public final class DateTimeHelper {
     private static final String DOT_CHARA = ".";
 
     private static final String MONTH_PART_IS_NOT_A_NUMBER = "Month part is not a number: ";
@@ -12,7 +12,7 @@ public final class ServiceUtils {
     private static final String INVALID_DURATION_FORMAT = "Invalid duration format: ";
     private static final String HOURS_MINUTES_SECONDS_FORMAT = "%d:%02d:%02d";
 
-    private ServiceUtils() {
+    private DateTimeHelper() {
     }
 
     public static int extractMonthFromFilename(String fileName) {

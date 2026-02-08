@@ -1,6 +1,8 @@
 package com.chertiavdev.dto.result.fact;
 
-import com.chertiavdev.export.csv.AbstractCsvWritable;
+import static com.chertiavdev.export.csv.CsvFormatter.joinCsv;
+
+import com.chertiavdev.dto.result.OperationDataResult;
 import com.chertiavdev.export.csv.CsvWritable;
 import java.time.LocalDate;
 import lombok.Getter;
@@ -8,7 +10,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class FactResultDto extends AbstractCsvWritable implements CsvWritable {
+public class FactResultDto extends OperationDataResult implements CsvWritable {
     private LocalDate date;
     private String time;
     private String location;

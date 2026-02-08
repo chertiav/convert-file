@@ -2,15 +2,15 @@ package com.chertiavdev;
 
 import static com.chertiavdev.factory.AppFactory.fileConverterService;
 import static com.chertiavdev.factory.AppFactory.fileReaderService;
+import static com.chertiavdev.factory.AppFactory.fileWriterService;
 import static com.chertiavdev.factory.AppFactory.inputFileListingService;
 
+import com.chertiavdev.domain.Mode;
 import com.chertiavdev.dto.result.OperationDataResult;
-import com.chertiavdev.enums.Mode;
 import com.chertiavdev.service.FileConverterService;
 import com.chertiavdev.service.FileReaderService;
 import com.chertiavdev.service.FileWriterService;
 import com.chertiavdev.service.InputFileListingService;
-import com.chertiavdev.service.impl.FileWriterServiceImpl;
 import java.nio.file.Path;
 import java.util.List;
 
@@ -47,7 +47,6 @@ public class Main {
 
         InputFileListingService listingService = inputFileListingService();
         List<Path> inputFiles = listingService.getFilePaths(mode, inputDir);
-        System.out.println(inputFiles);
 
         FileReaderService fileReaderService = fileReaderService();
         FileConverterService dataConverter = fileConverterService(fileReaderService);
@@ -55,8 +54,8 @@ public class Main {
         List<OperationDataResult> operationDataResults = dataConverter
                 .convertAllFiles(mode, inputFiles);
 
-        FileWriterService fileService = new FileWriterServiceImpl(outputCsvPath);
-        fileService.write(operationDataResults);
+        FileWriterService fileService = fileWriterService(outputCsvPath);
+        fileService.write(mode, operationDataResults);
 
         System.out.println(FILES_WRITTEN_SUCCESSFULLY);
     }

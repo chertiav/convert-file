@@ -1,7 +1,7 @@
 package com.chertiavdev.service;
 
+import com.chertiavdev.domain.Mode;
 import com.chertiavdev.dto.operation.OperationDto;
-import com.chertiavdev.enums.Mode;
 import java.util.List;
 
 public interface FileReaderService {

@@ -1,10 +1,10 @@
 package com.chertiavdev.mapper;
 
-import static com.chertiavdev.util.ServiceUtils.formatDuration;
+import static com.chertiavdev.util.DateTimeHelper.formatDuration;
 
+import com.chertiavdev.domain.OperationType;
 import com.chertiavdev.dto.operation.plan.PlanOperationDto;
 import com.chertiavdev.dto.result.plan.PlanResultDto;
-import com.chertiavdev.enums.OperationType;
 import java.time.Duration;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -37,10 +37,7 @@ public interface PlanResultMapper {
     PlanResultDto toDto(PlanOperationDto planOperationDto);
 
     @AfterMapping
-    default void updateSalaryInfo(
-            PlanOperationDto source,
-            @MappingTarget PlanResultDto target
-    ) {
+    default void updateSalaryInfo(@MappingTarget PlanResultDto target) {
         LocalDate date = target.getDate();
         target.setSalaryMonth(getSalaryMonth(date));
         target.setSalaryYear(getSalaryYear(date));
