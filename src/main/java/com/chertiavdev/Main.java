@@ -49,9 +49,9 @@ public class Main {
         List<Path> inputFiles = listingService.getFilePaths(mode, inputDir);
 
         FileReaderService fileReaderService = fileReaderService();
-        FileConverterService dataConverter = fileConverterService(fileReaderService);
+        FileConverterService fileConverterService = fileConverterService(fileReaderService);
 
-        List<OperationDataResult> operationDataResults = dataConverter
+        List<OperationDataResult> operationDataResults = fileConverterService
                 .convertAllFiles(mode, inputFiles);
 
         FileWriterService fileService = fileWriterService(outputCsvPath);
