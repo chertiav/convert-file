@@ -1,18 +1,25 @@
 package com.chertiavdev.util;
 
+import java.text.DecimalFormat;
+import java.text.DecimalFormatSymbols;
 import java.time.Duration;
+import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-public final class DateTimeHelper {
+public final class AppHelper {
     private static final String DOT_CHARA = ".";
 
     private static final String MONTH_PART_IS_NOT_A_NUMBER = "Month part is not a number: ";
     private static final char DASH_CHAR = '-';
     private static final String INVALID_DURATION_FORMAT = "Invalid duration format: ";
     private static final String HOURS_MINUTES_SECONDS_FORMAT = "%d:%02d:%02d";
+    private static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat(
+            "0.00",
+            new DecimalFormatSymbols(Locale.forLanguageTag("ru-RU"))
+    );
 
-    private DateTimeHelper() {
+    private AppHelper() {
     }
 
     public static int extractMonthFromFilename(String fileName) {
@@ -60,5 +67,9 @@ public final class DateTimeHelper {
         }
         String normalized = raw.trim().replace(',', '.');
         return Double.parseDouble(normalized);
+    }
+
+    public static String formatDecimal(Double number) {
+        return DECIMAL_FORMAT.format(number);
     }
 }

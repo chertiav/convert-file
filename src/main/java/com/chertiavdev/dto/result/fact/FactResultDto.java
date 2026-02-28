@@ -20,12 +20,12 @@ public class FactResultDto extends OperationDataResult implements CsvWritable {
     private int salaryYear;
     private String shiftType;
     private String comment;
-    private Double paidTimeAmount;
-    private Double eveningAllowance;
-    private Double nightAllowance;
-    private Double sundayHolidayAllowance;
-    private Double serviceAllowance;
-    private Double extra;
+    private String paidTimeAmount;
+    private String eveningAllowance;
+    private String nightAllowance;
+    private String sundayHolidayAllowance;
+    private String serviceAllowance;
+    private String extra;
 
     @Override
     public String toCsvLine() {
