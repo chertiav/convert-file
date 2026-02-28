@@ -1,6 +1,6 @@
 package com.chertiavdev.mapper;
 
-import static com.chertiavdev.util.DateTimeHelper.formatDuration;
+import static com.chertiavdev.util.AppHelper.formatDuration;
 
 import com.chertiavdev.domain.OperationType;
 import com.chertiavdev.dto.operation.plan.PlanOperationDto;

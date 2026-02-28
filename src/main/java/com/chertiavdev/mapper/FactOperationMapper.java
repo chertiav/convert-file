@@ -1,6 +1,6 @@
 package com.chertiavdev.mapper;
 
-import static com.chertiavdev.util.DateTimeHelper.parseDuration;
+import static com.chertiavdev.util.AppHelper.parseDuration;
 
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
 import com.chertiavdev.dto.operation.fact.FactOperationRawDto;
@@ -39,18 +39,18 @@ public interface FactOperationMapper {
             expression = "java(buildComment(raw.comment(), raw.durationRaw()))"
     )
     @Mapping(target = "paidTimeAmount", expression =
-            "java(com.chertiavdev.util.DateTimeHelper.parseDecimal(raw.paidTimeAmount()))")
+            "java(com.chertiavdev.util.AppHelper.parseDecimal(raw.paidTimeAmount()))")
     @Mapping(target = "eveningAllowance", expression =
-            "java(com.chertiavdev.util.DateTimeHelper.parseDecimal(raw.eveningAllowance()))")
+            "java(com.chertiavdev.util.AppHelper.parseDecimal(raw.eveningAllowance()))")
     @Mapping(target = "nightAllowance", expression =
-            "java(com.chertiavdev.util.DateTimeHelper.parseDecimal(raw.nightAllowance()))")
+            "java(com.chertiavdev.util.AppHelper.parseDecimal(raw.nightAllowance()))")
     @Mapping(target = "sundayHolidayAllowance", expression =
-            "java(com.chertiavdev.util.DateTimeHelper.parseDecimal(raw.sundayHolidayAllowance()))"
+            "java(com.chertiavdev.util.AppHelper.parseDecimal(raw.sundayHolidayAllowance()))"
     )
     @Mapping(target = "serviceAllowance", expression =
-            "java(com.chertiavdev.util.DateTimeHelper.parseDecimal(raw.serviceAllowance()))")
+            "java(com.chertiavdev.util.AppHelper.parseDecimal(raw.serviceAllowance()))")
     @Mapping(target = "extra", expression =
-            "java(com.chertiavdev.util.DateTimeHelper.parseDecimal(raw.extra()))"
+            "java(com.chertiavdev.util.AppHelper.parseDecimal(raw.extra()))"
     )
     FactOperationDto toFactOperationDto(FactOperationRawDto raw);
 
