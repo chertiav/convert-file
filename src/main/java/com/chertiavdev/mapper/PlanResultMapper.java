@@ -1,6 +1,8 @@
 package com.chertiavdev.mapper;
 
 import static com.chertiavdev.util.AppHelper.formatDuration;
+import static com.chertiavdev.util.AppHelper.getSalaryMonth;
+import static com.chertiavdev.util.AppHelper.getSalaryYear;
 
 import com.chertiavdev.domain.OperationType;
 import com.chertiavdev.dto.operation.plan.PlanOperationDto;
@@ -18,10 +20,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper(imports = {OperationType.class})
 public interface PlanResultMapper {
     PlanResultMapper INSTANCE = Mappers.getMapper(PlanResultMapper.class);
-    int SALARY_MONTH_THRESHOLD = 12;
-    int SALARY_PAYDAY_DECEMBER = 18;
-    int DEFAULT_SALARY_PAYDAY = 19;
-    int DAYS_ADDED_TO_GET_NEXT_MONTH = 25;
+
     ZoneId ZONE_ID = ZoneId.of("Europe/Copenhagen");
 
     @Mapping(target = "date", expression = "java(convertToLocalDate(planOperationDto.getStart()))")
@@ -57,27 +56,5 @@ public interface PlanResultMapper {
 
     default String getDuration(LocalDateTime start, LocalDateTime end) {
         return formatDuration(Duration.between(start, end));
-    }
-
-    default int getSalaryMonth(LocalDate date) {
-        int monthValue = date.getMonthValue();
-        int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
-                ? SALARY_PAYDAY_DECEMBER
-                : DEFAULT_SALARY_PAYDAY;
-
-        return date.getDayOfMonth() <= thresholdDay
-                ? monthValue
-                : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getMonthValue();
-    }
-
-    default int getSalaryYear(LocalDate date) {
-        int monthValue = date.getMonthValue();
-        int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
-                ? SALARY_PAYDAY_DECEMBER
-                : DEFAULT_SALARY_PAYDAY;
-
-        return date.getDayOfMonth() <= thresholdDay
-                ? date.getYear()
-                : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getYear();
     }
 }
