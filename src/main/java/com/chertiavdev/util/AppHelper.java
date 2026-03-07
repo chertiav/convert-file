@@ -3,6 +3,7 @@ package com.chertiavdev.util;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Locale;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -18,6 +19,10 @@ public final class AppHelper {
             "0.00",
             new DecimalFormatSymbols(Locale.forLanguageTag("ru-RU"))
     );
+    private static final int SALARY_MONTH_THRESHOLD = 12;
+    private static final int SALARY_PAYDAY_DECEMBER = 18;
+    private static final int DEFAULT_SALARY_PAYDAY = 19;
+    private static final int DAYS_ADDED_TO_GET_NEXT_MONTH = 25;
 
     private AppHelper() {
     }
@@ -71,5 +76,27 @@ public final class AppHelper {
 
     public static String formatDecimal(Double number) {
         return DECIMAL_FORMAT.format(number);
+    }
+
+    public static int getSalaryMonth(LocalDate date) {
+        int monthValue = date.getMonthValue();
+        int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
+                ? SALARY_PAYDAY_DECEMBER
+                : DEFAULT_SALARY_PAYDAY;
+
+        return date.getDayOfMonth() <= thresholdDay
+                ? monthValue
+                : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getMonthValue();
+    }
+
+    public static int getSalaryYear(LocalDate date) {
+        int monthValue = date.getMonthValue();
+        int thresholdDay = monthValue == SALARY_MONTH_THRESHOLD
+                ? SALARY_PAYDAY_DECEMBER
+                : DEFAULT_SALARY_PAYDAY;
+
+        return date.getDayOfMonth() <= thresholdDay
+                ? date.getYear()
+                : (date.plusDays(DAYS_ADDED_TO_GET_NEXT_MONTH)).getYear();
     }
 }

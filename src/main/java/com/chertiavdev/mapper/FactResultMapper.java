@@ -1,9 +1,13 @@
 package com.chertiavdev.mapper;
 
+import static com.chertiavdev.util.AppHelper.getSalaryMonth;
+import static com.chertiavdev.util.AppHelper.getSalaryYear;
+
 import com.chertiavdev.dto.operation.fact.FactOperationDto;
 import com.chertiavdev.dto.result.fact.FactResultDto;
 import com.chertiavdev.util.AppHelper;
 import java.time.Duration;
+import java.time.LocalDate;
 import org.mapstruct.AfterMapping;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -37,9 +41,10 @@ public interface FactResultMapper {
 
     @AfterMapping
     default void updateSalaryInfo(FactOperationDto source, @MappingTarget FactResultDto target) {
+        LocalDate date = target.getDate();
         if (source.getDate() != null) {
-            target.setSalaryMonth(source.getDate().getMonthValue());
-            target.setSalaryYear(source.getDate().getYear());
+            target.setSalaryMonth(getSalaryMonth(date));
+            target.setSalaryYear(getSalaryYear(date));
         }
     }
 
